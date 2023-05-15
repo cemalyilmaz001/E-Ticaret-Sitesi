@@ -1,0 +1,191 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+      
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    {% for i in site %}
+      <title>{{ i.title }} </title>
+      <meta name="description" content="{{ i.description }}">
+      <meta name="keywords" content="{{ i.keywords }}">
+    {% endfor %}
+  </head>
+  <body>
+
+    <div class="container">
+        <div class="row">
+            <nav class="navbar bg-body-tertiary fixed-top">
+                <div class="container">
+                  <a class="navbar-brand navbar-edits01das" style="padding-left:120px;" href="/">
+                    <img src="{% static 'image/mum.png' %}" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                    Mum & Sanat Evi
+                  </a>
+
+                  <form method="GET" action="#" class="form-edipl">
+                    <input class="form-search" type="search" placeholder="Aradığınız Ürün, kategori ve markayı yazınız">
+                    <img src="{% static 'image/search.png' %}"  width="30" height="24" class="right-searchdasdas">
+                        <span class="right-grs-spet-tp">
+                      <a href="/login" class="right-grs-spet-grs">
+                        <img src="{% static 'image/user.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
+                        Giriş Yap &nbsp;&nbsp;&nbsp;
+                      </a>
+                    </span>
+                    
+                    <span class="right-grs-spet-tp">
+                      <a href="/mybasket" class="right-grs-spet-grs">
+                        | &nbsp;&nbsp;&nbsp;&nbsp;
+                        <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
+                         Sepetim
+                      </a>
+                    </span>
+                  </form>
+
+                </div>
+            </nav>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col"></div>
+                <div class="col-md-10 mt-4">
+
+
+                  <div id="carouselExampleCaptions" class="carousel slide">
+                    <div class="carousel-indicators">
+                      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+
+                      {% for w in slide %}
+                        
+                        <div class="carousel-item active">
+                          <img src="..{{ w.slide_image.url }}" class="edit-sldie d-block w-100" alt="...">
+                          <div class="carousel-caption d-none d-md-block" style="color:black;">
+                            <h5>{{ w.slide_title }}</h5>
+                            <p>{{ w.slide_descrp }}</p>
+                          </div>
+                        </div>
+
+                      {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+
+
+
+
+            </div>
+            <div class="col"></div>
+        </div>
+
+        <div class="row mt-5" style="padding-left:110px;">
+          
+            
+            <div class="col"></div>
+            <div class="col-md-6">
+                <h2>Kayıt Alanı</h2>
+                <form method="POST" action="#">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email adresi</label>
+                        <input type="email" required class="form-control" id="exampleInputEmail1">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Adınız Soyadınız</label>
+                        <input type="text" required class="form-control" id="exampleInputPassword1">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleFormControlSelect1" class="pb-2">Cinsiyet</label>
+                        <select class=" form-control" id="exampleFormControlSelect1">
+                          <option>Erkek</option>
+                          <option>Kadın</option>
+                        </select>
+                      </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Parola</label>
+                        <input type="password" required class="form-control" id="exampleInputPassword1">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Parola Tekrar</label>
+                        <input type="password" required class="form-control" id="exampleInputPassword1">
+                        <div id="emailHelp" class="form-text">Mevcut Hesabım Zaten Var <a href="/login">Giriş Alanı</a>.</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Kayıt</button>
+                </form>
+            </div>
+            <div class="col"></div>
+
+          
+
+        </div>
+      </div>
+
+
+
+      <div class="container">
+        <footer class="py-5">
+          <div class="row" style="position: relative; left:100px;">
+      
+            <div class="col-6 col-md-2 mb-3">
+              <h5>Hakkımızda</h5>
+              <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">İletişim</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Biz Kimiz</a></li>
+              </ul>
+            </div>
+      
+            <div class="col-6 col-md-2 mb-3">
+              <h5>Yardım</h5>
+              <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Sıkça sorulan sorular</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Nasıl İade Ederim</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Fiyatlandırma</a></li>
+              </ul>
+            </div>
+      
+            <div class="col-md-5 offset-md-1 mb-3">
+              <form method="POST" action="../abonelik_save/">
+                {% csrf_token %}
+                <h5>Haber bültenimize abone ol</h5>
+                <p>Ücretsiz olarak tüm indirimlerden haberdar ol.</p>
+                <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                  <label for="newsletter1" class="visually-hidden">Email adres</label>
+                  <input id="newsletter1" type="text" name="email_abonelik" class="form-control" placeholder="Email address">
+                  <button class="btn btn-primary" type="submit">Abone</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      
+          <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top" style="position: relative; left:100px;">
+            <p>&copy; 2023 Tüm hakları saklıdır.</p>
+            <ul class="list-unstyled d-flex">
+              <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
+              <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
+              <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+            </ul>
+          </div>
+        </footer>
+      </div>
+      
+          <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        </body>
+      </html>
