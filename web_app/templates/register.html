@@ -1,9 +1,16 @@
 {% load static %}
+
+{% if user.is_authenticated %}
+    
+<script>
+  window.location.href = "http://127.0.0.1:8000/";
+</script>
+
+    {% else %}
+
 <!doctype html>
 <html>
-  <head>
-      
-    
+  <head>    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
@@ -92,39 +99,40 @@
         </div>
 
         <div class="row mt-5" style="padding-left:110px;">
-          
             
             <div class="col"></div>
             <div class="col-md-6">
+              {% if messages %}
+              <div class="alert" style="width: 1100px;" role="alert">
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+
                 <h2>Kayıt Alanı</h2>
-                <form method="POST" action="#">
+                <form method="POST" action="/register/">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email adresi</label>
-                        <input type="email" required class="form-control" id="exampleInputEmail1">
+                        <label for="exampleInputEmail1" class="form-label">Mail Adresiniz</label>
+                        <input type="email" required name="email" class="form-control" id="exampleInputEmail1">
                     </div>
 
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Adınız Soyadınız</label>
-                        <input type="text" required class="form-control" id="exampleInputPassword1">
+                        <input type="text" required name="username" class="form-control" id="exampleInputPassword1">
                     </div>
 
                     <div class="mb-3">
-                        <label for="exampleFormControlSelect1" class="pb-2">Cinsiyet</label>
-                        <select class=" form-control" id="exampleFormControlSelect1">
-                          <option>Erkek</option>
-                          <option>Kadın</option>
-                        </select>
-                      </div>
-
-                    <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Parola</label>
-                        <input type="password" required class="form-control" id="exampleInputPassword1">
+                        <input type="password" name="password" required class="form-control" id="exampleInputPassword1">
                     </div>
 
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Parola Tekrar</label>
-                        <input type="password" required class="form-control" id="exampleInputPassword1">
+                        <input type="password" name="passwordx" required class="form-control" id="exampleInputPassword1">
                         <div id="emailHelp" class="form-text">Mevcut Hesabım Zaten Var <a href="/login">Giriş Alanı</a>.</div>
                     </div>
                     
@@ -189,3 +197,5 @@
           <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         </body>
       </html>
+
+      {% endif %}

@@ -19,6 +19,7 @@
 
     <div class="container">
         <div class="row">
+          
             <nav class="navbar bg-body-tertiary fixed-top">
                 <div class="container">
                   <a class="navbar-brand navbar-edits01das" style="padding-left:120px;" href="/">
@@ -28,13 +29,24 @@
 
                   <form method="GET" action="#" class="form-edipl">
                     <input class="form-search" type="search" placeholder="Aradığınız Ürün, kategori ve markayı yazınız">
+                    
                     <img src="{% static 'image/search.png' %}"  width="30" height="24" class="right-searchdasdas">
-                        <span class="right-grs-spet-tp">
-                      <a href="/login" class="right-grs-spet-grs">
-                        <img src="{% static 'image/user.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
-                        Giriş Yap &nbsp;&nbsp;&nbsp;
-                      </a>
-                    </span>
+                    
+                    {% if user.is_authenticated %}
+                          <span class="right-grs-spet-tp">
+                        <a href="/logout" class="right-grs-spet-grs">
+                          <img src="{% static 'image/logout.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
+                          Çıkış Yap &nbsp;&nbsp;&nbsp;
+                        </a>
+                      </span>
+                    {% else %}
+                          <span class="right-grs-spet-tp">
+                        <a href="/login" class="right-grs-spet-grs">
+                          <img src="{% static 'image/user.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
+                          Giriş Yap &nbsp;&nbsp;&nbsp;
+                        </a>
+                      </span>
+                    {% endif %}
                     
                     <span class="right-grs-spet-tp">
                       <a href="/mybasket" class="right-grs-spet-grs">
@@ -52,7 +64,6 @@
         <div class="row mt-2">
             <div class="col"></div>
                 <div class="col-md-10 mt-4">
-
 
                   <div id="carouselExampleCaptions" class="carousel slide">
                     <div class="carousel-indicators">
@@ -85,14 +96,22 @@
                   </div>
 
 
-
-
             </div>
             <div class="col"></div>
         </div>
 
-  <div class="row mt-5" style="padding-left:110px;">
+  <div class="row mt-4" style="padding-left:110px;">
           
+    {% if messages %}
+    <div class="alert" style="width: 1100px;" role="alert">
+      <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
           <!-- Ürünler Bu kısımda -->
           {% for w in ürün_list %}
           <div class="card mt-3" style="width: 17rem;">
