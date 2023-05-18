@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi
+from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim
 
 site  = Site_Ayarları.objects.all()
 slide = Slide_Gösterisi.objects.all()
@@ -21,14 +21,58 @@ def index(request):
     }
     return render(request, "base.html",context)
 
+def bzkmz(request):
+    global site
+    global slide
+    global ürün_list
+    context = {
+        'site': site,
+        'slide':slide,
+        'ürün_list':ürün_list,
+    }
+    return render(request, "bzkm.html",context)
+
+def soru(request):
+    global site
+    global slide
+    global ürün_list
+    context = {
+        'site': site,
+        'slide':slide,
+        'ürün_list':ürün_list,
+    }
+    return render(request, "sorular.html",context)
+
 def email_abonelik(request):
     if request.method == 'POST':
         abone = request.POST["email_abonelik"]
         email = Email_Abonelik.objects.create(email_address=abone)
         email.save()
+        messages.success(request, f'Kayıt Başarılı !!')
         return redirect("/")
     else:
         return redirect("/")
+
+def contact(request):
+    global site
+    global slide
+    global ürün_list
+
+    if request.method == 'POST':
+        email = request.POST["email"]
+        user = request.POST["username"]
+        istek = request.POST["isteks"]
+        contact = İletişim.objects.create(email=email, ad=user, istek=istek)
+        contact.save()
+        messages.success(request, f'Kayıt Başarılı !!')
+        return redirect("/")
+    else:
+        context = {
+            'site': site,
+            'slide':slide,
+            'ürün_list':ürün_list,
+        }
+        return render(request, "iletişim.html",context)
 
 def mybasket(request):
     global site
@@ -41,6 +85,30 @@ def mybasket(request):
     }
     return render(request, "basket.html",context)
 
+def myprofil(request):
+    global site
+    global slide
+    global ürün_list
+
+    context = {
+        'site': site,
+        'slide':slide,
+        'ürün_list':ürün_list,
+    }
+    return render(request, "myprofil.html", context)
+
+def ayarlar(request):
+    global site
+    global slide
+    global ürün_list
+
+    context = {
+        'site': site,
+        'slide':slide,
+        'ürün_list':ürün_list,
+    }
+    return render(request, "setting.html", context)
+
 def login_view(request):
     global site
     global slide
@@ -49,6 +117,12 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
+
+        if len(username) >= 40 or len(password) >= 60:
+            messages.info(request, f'Hatalı Giriş Yaptınız !')
+            return redirect('/')
+
+
         user = authenticate(request, username = username, password = password)
         if user is not None:
             login(request, user)

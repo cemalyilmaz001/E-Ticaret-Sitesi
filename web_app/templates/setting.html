@@ -1,0 +1,25 @@
+{% extends "index.html" %}
+    {% block content %}
+    {% if user.is_authenticated %}
+    
+    <div class="row mt-4">
+          
+        <div class="col"></div>
+        <div class="col-md-6">
+            <h2>Ayarlar</h2>
+            
+        </div>
+        <div class="col"></div>
+
+    </div>
+    </div>
+
+        {% else %}
+
+        <script>
+          window.location.href = "http://127.0.0.1:8000/";
+        </script>
+
+      {% endif %}
+
+      {% endblock %}
