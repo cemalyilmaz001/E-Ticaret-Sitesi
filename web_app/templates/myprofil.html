@@ -55,11 +55,16 @@ img {
         
         <div class="card mb-4">
           <div class="card-body text-center">
-            <img src="{% static 'image/user.png' %}" class="rounded-circle img-fluid" style="width: 150px;">
+
+            {% for h in hesap %} 
+                {% if h.adi_soyadi == request.user.username %}
+                <img src="..{{ h.profil_photo.url }}" class="rounded-circle img-fluid" style="width: 150px;">
+                {% endif %}
+            {% endfor %}
+
             <img src="{% static 'image/imgupdate.png' %}" onclick="myfunctionClick()" id="profileImage" class="profile-pic rounded-circle " style="width: 25px; position: absolute; left:234px; top:140px; cursor:pointer">
 
-
-            <form action="/imageUpdate" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'users:imageUpdate' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input class="file-upload upload-button" type="file" name="image_update" id="myCheck" required/>
                 <input style="display: none;" type="text" name="name" value="{{ request.user.username  }}" required/>
@@ -98,61 +103,65 @@ img {
                 <p class="text-muted mb-0">
                   <form action="{% url 'users:hesap_guncelleme' %}" method="post" style="width: auto;">
                   {% csrf_token %}
-                    <input type="text" value="{{ request.user.username }}" required name="username" class="form-control">
-                    <input style="display: none;" type="text" name="usernameasli" required value="{{ request.user.username }}"/>
-                    <input style="display: none;" type="text" name="userid" required value="{{ request.user.id }}"/>
-                      </p>
+
+                  {% for h in hesap %} 
+                      {% if h.adi_soyadi == request.user.username %} 
+                        <input type="text" value="{{ h.adi_soyadi }}" required name="username" class="form-control">
+                        <input style="display: none;" type="text" name="usernameasli" required value="{{ request.user.username }}"/>
+                          </p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="text-muted mb-0">
+                            <input type="text" value="{{ h.email }}" required name="email" class="form-control" >  
+                          </p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0">Parola</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="text-muted mb-0">
+                            <input type="password" value="parolam" name="parolam" required class="form-control">  
+                          </p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0">İletişim Numarası</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="text-muted mb-0">
+                            <input type="text" placeholder="(000) 000 000" value="{{ h.iletişim_tel }}" required name="iletisim" class="form-control">
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0">Kargo Adresi</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="text-muted mb-0">
+                            <input type="text" placeholder="Lütfen Eksiksiz Giriniz !" value="{{ h.kargo_adres }}" required name="adres" class="form-control">
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Email</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">
-                        <input type="text" value="{{ request.user.email }}" required name="email" class="form-control" >  
-                      </p>
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Parola</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">
-                        <input type="password" value="parolam" name="parolam" required class="form-control">  
-                      </p>
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">İletişim Numarası</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">
-                        <input type="text" placeholder="(000) 000 000" required name="iletisim" class="form-control">
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Kargo Adresi</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">
-                        <input type="text" placeholder="Lütfen Eksiksiz Giriniz !" required name="adres" class="form-control">
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-outline-success ms-1">Güncelle</button>
-        </form>
+                  <button type="submit" class="btn btn-outline-success ms-1">Güncelle</button>
+            </form>
+            {% endif %}
+            {% endfor %}
 
       {% else %}
         <script>

@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim, kkb_hesabim, Yardım
+from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim, kkb_hesabim, Yardım 
 
 site        = Site_Ayarları.objects.all()
 slide       = Slide_Gösterisi.objects.all()
@@ -94,11 +94,13 @@ def myprofil(request):
     global site
     global slide
     global ürün_list
+    global kkb_hesap
 
     context = {
         'site': site,
         'slide':slide,
         'ürün_list':ürün_list,
+        'hesap':kkb_hesap,
     }
     return render(request, "myprofil.html", context)
 
@@ -107,9 +109,13 @@ def imageUpdate(request):
     global slide
     global ürün_list
 
-    if request.FILES["image_update"] and request.POST["name"]:
+    if request.method == "POST":
         image = request.FILES["image_update"]
         name  = request.POST["name"]
+        # request.user.id
+        new_hesap = kkb_hesabim.objects.get(adi_soyadi=f"{str(name)}")
+        new_hesap.profil_photo = image
+        new_hesap.save()
 
         messages.success(request, f'Kayıt Başarılı !!')
         return redirect("/")
@@ -128,18 +134,34 @@ def hesap_guncelleme(request):
     global ürün_list
 
     if request.method == "POST":
-        username = request.POST["username"]
-        email    = request.POST["email"]
-        parolam  = request.POST["parolam"]
-        telefon  = request.POST["iletisim"]
-        adres    = request.POST["adres"]
-        name     = request.POST["usernameasli"]
-        ids      = request.POST["idsa"]
+        usernames = request.POST["username"]
+        emails    = request.POST["email"]
+        parolam   = request.POST["parolam"]
+        telefon   = request.POST["iletisim"]
+        adres     = request.POST["adres"]
+        name      = request.POST["usernameasli"]
 
-        user     = User.objects.get(username=name)
+        user      = User.objects.get(id=request.user.id)
 
-        messages.success(request, f'Kayıt Başarılı !!')
-        return redirect("/")
+        for urs in User.objects.all():
+            if urs.username != usernames:
+                user.username = usernames
+
+        user.email    = emails
+
+        if parolam != "parolam":
+            user.set_password(f'{str(parolam)}')
+
+        user.save()
+        new_hesap = kkb_hesabim.objects.get(adi_soyadi=f"{str(name)}")
+        new_hesap.adi_soyadi     = usernames
+        new_hesap.email          = emails
+        new_hesap.iletişim_tel   = telefon
+        new_hesap.kargo_adres    = adres
+        new_hesap.save()
+
+        messages.success(request, f'Hesabınız Güncellendi !!')
+        return redirect("/myprofil")
     else:
         return redirect("/")
 
@@ -156,8 +178,7 @@ def login_view(request):
 
         if len(username) >= 40 or len(password) >= 60:
             messages.info(request, f'Hatalı Giriş Yaptınız !')
-            return redirect('/')
-
+            return redirect('/login')
 
         user = authenticate(request, username = username, password = password)
         if user is not None:
@@ -166,6 +187,7 @@ def login_view(request):
             return redirect('/')
         else:
             messages.info(request, f'Hatalı Giriş Yaptınız !')
+            return redirect('/login')
     else:
         context = {
             'site': site,
@@ -184,6 +206,7 @@ def register(request):
         username        = request.POST['username']
         password        = request.POST['password']
         password_tekrar = request.POST['passwordx']
+
         for user in User.objects.all():
             if user.username == username:
                 messages.success(request, f' Kullanıcı adınız kullanılmakta !!')
@@ -191,6 +214,8 @@ def register(request):
 
         if password == password_tekrar:
             user = User.objects.create_user(f"{str(username)}", f"{str(email)}", f"{str(password)}")
+            new_hesap = kkb_hesabim.objects.create(adi_soyadi=f"{str(username)}", essisid="None", profil_photo="None", email=f"{str(email)}", iletişim_tel="None", kargo_adres="None", kkkart_numarasi="None", kkkart_ay="None",kkkart_yil="None",kkkart_cvv="None")
+            new_hesap.save()
             user.save()
             messages.success(request, f' Kulllanıcı Kaydınız Oluşturuldu !!')
             return redirect('/login')

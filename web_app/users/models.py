@@ -18,6 +18,7 @@ class Yardım(models.Model):
 # Kullanıcı Bilgileri
 class kkb_hesabim(models.Model):
     adi_soyadi      = models.CharField(max_length=50)
+    essisid         = models.CharField(max_length=50)
     profil_photo    = models.ImageField(upload_to='image/') 
     email           = models.CharField(max_length=50)
     iletişim_tel    = models.CharField(max_length=50)
