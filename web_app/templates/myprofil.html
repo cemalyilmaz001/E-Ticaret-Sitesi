@@ -1,25 +1,162 @@
 {% extends "index.html" %}
-    {% block content %}
+{% load static %}
+{% block content %}
+    <style>
+    .profile-pic {
+    width: 200px;
+    max-height: 200px;
+    display: inline-block;
+}
+
+.file-upload {
+    display: none !important;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+.p-image {
+  position: absolute;
+  top: 167px;
+  right: 30px;
+  color: #666666;
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.p-image:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.upload-button {
+  font-size: 1.2em;
+}
+
+.upload-button:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+  color: #999;
+}
+</style>
     {% if user.is_authenticated %}
-    
     <div class="row mt-4">
-          
-      <div class="col"></div>
-      <div class="col-md-6">
-          <h2>Profilim</h2>
-          
+    </div>
+
+    <div class="row">
+      <div class="col-lg-10">
+        <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Hesabım</li>
+          </ol>
+        </nav>
       </div>
-      <div class="col"></div>
+    </div>
 
-  </div>
-</div>
+    <div class="row">
+      <div class="col-lg-4">
+        
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="{% static 'image/user.png' %}" class="rounded-circle img-fluid" style="width: 150px;">
+            <img src="{% static 'image/imgupdate.png' %}" onclick="myfunctionClick()" id="profileImage" class="profile-pic rounded-circle " style="width: 25px; position: absolute; left:234px; top:140px; cursor:pointer">
 
-        {% else %}
 
+            <form action="/imageUpdate" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input class="file-upload upload-button" type="file" name="image_update" id="myCheck" required/>
+                <input style="display: none;" type="text" name="name" value="{{ request.user.username  }}" required/>
+
+                <h5 class="my-3">{{ request.user.username }}</h5>
+                <p class="text-muted mb-1">Yeni Kullanıcı</p>
+                <p class="text-muted mb-4"></p>
+                <div class="d-flex justify-content-center mb-2">
+                  <button type="submit" class="btn btn-outline-success ms-1">Resim Ekle</button>
+                </div>
+            </form>
+
+
+
+          </div>
+        </div>
+        
+
+      <script>
+        function myfunctionClick(params) {
+          document.getElementById("myCheck").click();
+        }
+      </script>
+
+
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Ad Soyad</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">
+                  <form action="{% url 'users:hesap_guncelleme' %}" method="post" style="width: auto;">
+                  {% csrf_token %}
+                    <input type="text" value="{{ request.user.username }}" required name="username" class="form-control">
+                    <input style="display: none;" type="text" name="usernameasli" required value="{{ request.user.username }}"/>
+                    <input style="display: none;" type="text" name="userid" required value="{{ request.user.id }}"/>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <input type="text" value="{{ request.user.email }}" required name="email" class="form-control" >  
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Parola</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <input type="password" value="parolam" name="parolam" required class="form-control">  
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">İletişim Numarası</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <input type="text" placeholder="(000) 000 000" required name="iletisim" class="form-control">
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Kargo Adresi</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <input type="text" placeholder="Lütfen Eksiksiz Giriniz !" required name="adres" class="form-control">
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-outline-success ms-1">Güncelle</button>
+        </form>
+
+      {% else %}
         <script>
           window.location.href = "http://127.0.0.1:8000/";
         </script>
-
       {% endif %}
-
       {% endblock %}

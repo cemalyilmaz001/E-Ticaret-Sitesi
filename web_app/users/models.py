@@ -2,12 +2,30 @@ from django.db import models
 
 # Create your models here.
 
-# Site Ayarları
 class Site_Ayarları(models.Model):
     site_title   = models.CharField(max_length=50)
     navbar_title = models.CharField(max_length=50)
     description  = models.CharField(max_length=50)
     keywords     = models.CharField(max_length=50)
+    bizkmz_text  = models.CharField(max_length=550)
+    yardım_tel   = models.CharField(max_length=12)
+
+class Yardım(models.Model):
+    yrdm_title       = models.CharField(max_length=50)
+    yrdm_description = models.CharField(max_length=250)
+    yrdm_keywords    = models.CharField(max_length=150)
+
+# Kullanıcı Bilgileri
+class kkb_hesabim(models.Model):
+    adi_soyadi      = models.CharField(max_length=50)
+    profil_photo    = models.ImageField(upload_to='image/') 
+    email           = models.CharField(max_length=50)
+    iletişim_tel    = models.CharField(max_length=50)
+    kargo_adres     = models.CharField(max_length=50)
+    kkkart_numarasi = models.CharField(max_length=30)
+    kkkart_ay       = models.CharField(max_length=30)
+    kkkart_yil      = models.CharField(max_length=30)
+    kkkart_cvv      = models.CharField(max_length=30)
 
 # Kayıtlı Email Adreslerine Bilgi gönderilecek.
 class Email_Abonelik(models.Model):

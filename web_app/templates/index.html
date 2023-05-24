@@ -12,8 +12,32 @@
       <meta name="description" content="{{ i.description }}">
       <meta name="keywords" content="{{ i.keywords }}">
     {% endfor %}
+
+    <style>
+      #myBtn {
+        display: none;
+      }
+    </style>
   </head>
   <body>
+
+    <button id="myBtn" onclick="window.scrollTo(0, 0);" style="position: fixed; bottom:100px; background-color: white; border:none; right: 50px;">
+      <img src="{% static 'image/top.png' %}" alt="Logo" width="30" height="24" >
+      Yukarı Kaydır
+    </button>
+
+    <script>
+      let mybutton = document.getElementById("myBtn");
+      window.onscroll = function() {scrollFunction()};
+      function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          mybutton.style.display = "block";
+        } else {
+          mybutton.style.display = "none";
+        }
+      }
+      </script>
+      
 
     <div class="container">
         <div class="row fixed-top ">
@@ -22,10 +46,10 @@
             <nav class="navbar navbar-expand-lg" style="background-color: white !important;">
               <div class="container-fluid">
                 <a class="navbar-brand" href="/">
-                  <img src="{% static 'image/mum.png' %}" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                  <img src="{% static 'image/mum.png' %}" style="height: 24px;" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                   {% for i in site %}
                     {{ i.navbar_title }}
-                    {% endfor %}
+                  {% endfor %}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
@@ -35,17 +59,36 @@
                   <ul class="navbar-nav">
                     
                     {% if user.is_authenticated %}
-          
+
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" style="color:black;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Kategori
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">
+                          Mum
+                        </a></li>
+                        <li><a class="dropdown-item" href="#">
+                          Ahşap
+                        </a></li>
+                      </ul>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link" href="/mybasket" style="color:black;">
+                        Sepetim
+                        <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
+                      </a>
+                    </li>
+
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" style="color:black;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {{ request.user.username }}
                       </a>
+
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/myprofil">
-                          Profil
-                        </a></li>
-                        <li><a class="dropdown-item" href="/setting">
-                          Ayarlar
+                          Hesabım
                         </a></li>
 
                         {% if request.user.is_superuser %}
@@ -62,15 +105,31 @@
                       </ul>
                     </li>
 
-                    <li class="nav-item">
-                      <a class="nav-link" href="/mybasket" style="color:black;">
-                        <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
-                        Sepetim
-                      </a>
-                    </li>
-
                     {% else %}
                     
+                     
+
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="color:black;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Kategori
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#">
+                            Mum
+                          </a></li>
+                          <li><a class="dropdown-item" href="#">
+                            Ahşap
+                          </a></li>
+                        </ul>
+                      </li>
+
+                      <li class="nav-item">
+                        <a class="nav-link" href="/mybasket" style="color:black;">
+                          <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
+                          Sepetim
+                        </a>
+                      </li>
+
                       <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" style="color:black;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                           Giriş Yap
@@ -85,14 +144,7 @@
                             Kayıt Ol
                           </a></li>
                         </ul>
-                      </li>
-
-                      <li class="nav-item">
-                        <a class="nav-link" href="/mybasket" style="color:black;">
-                          <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
-                          Sepetim
-                        </a>
-                      </li>
+                      </li> 
 
                     {% endif %}
 
@@ -147,7 +199,7 @@
         <div class="row mt-3">
           <div class="col"></div>
             <div class="col-md-10 mt-2">
-            <img src="{% static 'image/reklam.png' %}" width="1076" height="140" >
+            <img src="{% static 'image/reklam.png' %}" style="height: 140px !important;" width="1076" height="140" >
           </div>
           <div class="col"></div>
         </div>
@@ -183,7 +235,9 @@
           <h5>Yardım</h5>
           <ul class="nav flex-column">
             <li class="nav-item mb-2"><a href="/questions" class="nav-link p-0 text-muted">Sıkça sorulan sorular</a></li>
-            <li class="nav-item mb-2"><a href="https://wa.me/05538864950" target="_blank" class="nav-link p-0 text-muted">Yardım Al</a></li>
+            {% for i in site %}
+              <li class="nav-item mb-2"><a href="https://wa.me/{{ i.yardım_tel }}" target="_blank" class="nav-link p-0 text-muted">Yardım Al</a></li>
+            {% endfor %}
           </ul>
         </div>
   
@@ -203,11 +257,6 @@
   
       <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top" style="position: relative; left:100px;">
         <p>&copy; 2023 Tüm hakları saklıdır.</p>
-        <ul class="list-unstyled d-flex">
-          <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-          <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-          <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-        </ul>
       </div>
     </footer>
   </div>

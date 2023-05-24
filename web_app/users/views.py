@@ -3,11 +3,13 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim
+from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim, kkb_hesabim, Yardım
 
-site  = Site_Ayarları.objects.all()
-slide = Slide_Gösterisi.objects.all()
-ürün_list = Ürün_Listesi.objects.all()
+site        = Site_Ayarları.objects.all()
+slide       = Slide_Gösterisi.objects.all()
+ürün_list   = Ürün_Listesi.objects.all()
+kkb_hesap   = kkb_hesabim.objects.all()
+ssss        = Yardım.objects.all()
 
 # Create your views here.
 def index(request):
@@ -36,12 +38,15 @@ def soru(request):
     global site
     global slide
     global ürün_list
+    global soru
+
     context = {
         'site': site,
         'slide':slide,
         'ürün_list':ürün_list,
+        'yardim':ssss,
     }
-    return render(request, "sorular.html",context)
+    return render(request, "sorular.html", context)
 
 def email_abonelik(request):
     if request.method == 'POST':
@@ -97,17 +102,48 @@ def myprofil(request):
     }
     return render(request, "myprofil.html", context)
 
-def ayarlar(request):
+def imageUpdate(request):  
     global site
     global slide
     global ürün_list
 
-    context = {
-        'site': site,
-        'slide':slide,
-        'ürün_list':ürün_list,
-    }
-    return render(request, "setting.html", context)
+    if request.FILES["image_update"] and request.POST["name"]:
+        image = request.FILES["image_update"]
+        name  = request.POST["name"]
+
+        messages.success(request, f'Kayıt Başarılı !!')
+        return redirect("/")
+    else:
+        context = {
+            'site': site,
+            'slide':slide,
+            'ürün_list':ürün_list,
+        }
+        return render(request, "base.html",context)
+
+
+def hesap_guncelleme(request): 
+    global site
+    global slide
+    global ürün_list
+
+    if request.method == "POST":
+        username = request.POST["username"]
+        email    = request.POST["email"]
+        parolam  = request.POST["parolam"]
+        telefon  = request.POST["iletisim"]
+        adres    = request.POST["adres"]
+        name     = request.POST["usernameasli"]
+        ids      = request.POST["idsa"]
+
+        user     = User.objects.get(username=name)
+
+        messages.success(request, f'Kayıt Başarılı !!')
+        return redirect("/")
+    else:
+        return redirect("/")
+
+
 
 def login_view(request):
     global site
