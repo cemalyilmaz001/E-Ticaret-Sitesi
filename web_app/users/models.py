@@ -32,7 +32,7 @@ class kkb_hesabim(models.Model):
 class Email_Abonelik(models.Model):
     email_address = models.CharField(max_length=50)
 
-# Değişen görseller Slide.
+# Müşteri sana mesaj göndermiş
 class İletişim(models.Model):
     email = models.CharField(max_length=50)
     ad    = models.CharField(max_length=50)
