@@ -117,7 +117,7 @@ def imageUpdate(request):
         new_hesap.profil_photo = image
         new_hesap.save()
 
-        messages.success(request, f'Kayıt Başarılı !!')
+        messages.success(request, f'Profil Resmi Güncellendi !!')
         return redirect("/")
     else:
         context = {
@@ -135,30 +135,34 @@ def hesap_guncelleme(request):
 
     if request.method == "POST":
         usernames = request.POST["username"]
+        name      = request.POST["usernameasli"]
         emails    = request.POST["email"]
         parolam   = request.POST["parolam"]
         telefon   = request.POST["iletisim"]
         adres     = request.POST["adres"]
-        name      = request.POST["usernameasli"]
+        t = 0
+        for r in User.objects.all():
+            if r.username == usernames:
+                t += 1
 
         user      = User.objects.get(id=request.user.id)
-
-        for urs in User.objects.all():
-            if urs.username != usernames:
-                user.username = usernames
+        new_hesap = kkb_hesabim.objects.get(adi_soyadi=f"{str(name)}")
 
         user.email    = emails
+
+        if t == 0:
+            user.username           = usernames
+            new_hesap.adi_soyadi    = usernames
+
+        new_hesap.email          = emails
+        new_hesap.iletişim_tel   = telefon
+        new_hesap.kargo_adres    = adres
+        new_hesap.save()
 
         if parolam != "parolam":
             user.set_password(f'{str(parolam)}')
 
         user.save()
-        new_hesap = kkb_hesabim.objects.get(adi_soyadi=f"{str(name)}")
-        new_hesap.adi_soyadi     = usernames
-        new_hesap.email          = emails
-        new_hesap.iletişim_tel   = telefon
-        new_hesap.kargo_adres    = adres
-        new_hesap.save()
 
         messages.success(request, f'Hesabınız Güncellendi !!')
         return redirect("/myprofil")
@@ -214,7 +218,7 @@ def register(request):
 
         if password == password_tekrar:
             user = User.objects.create_user(f"{str(username)}", f"{str(email)}", f"{str(password)}")
-            new_hesap = kkb_hesabim.objects.create(adi_soyadi=f"{str(username)}", essisid="None", profil_photo="None", email=f"{str(email)}", iletişim_tel="None", kargo_adres="None", kkkart_numarasi="None", kkkart_ay="None",kkkart_yil="None",kkkart_cvv="None")
+            new_hesap = kkb_hesabim.objects.create(adi_soyadi=f"{str(username)}", profil_photo="", email=f"{str(email)}", iletişim_tel="", kargo_adres="", kkkart_numarasi="", kkkart_ay="",kkkart_yil="",kkkart_cvv="")
             new_hesap.save()
             user.save()
             messages.success(request, f' Kulllanıcı Kaydınız Oluşturuldu !!')
