@@ -31,173 +31,66 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="product-row">
-                        <!-- Boş Alan -->
-                        <td>
-                            <figure class="product-image-container">
-                                    <img src="{% static 'image/image2.jpeg' %}" style="border-radius: 50%; width: 38px; height: 38px; position: relative; left:30px; top:5px;" >
-                            </figure>
-                        </td>
-                        <!-- Ürün İmage -->
-                        <td class="product-col">
-                            <h5 class="product-title"  style="font-size:20px; line-height: 2.3;">
-                                Lorem ipsum 
-                            </h5>
-                        </td>
-                        <!-- Ürün Fiyat Alanı -->
-                        <td>
-                            <p style="line-height: 3;">
-                                17.90 ₺
-                            </p>
-                        </td>
+                    {% for u in sepetim %}
+                        {% if u.kullanici.adi_soyadi == request.user.username %}
+                            <tr class="product-row">
+                                <!-- Boş Alan -->
+                                <td>
+                                    <figure class="product-image-container">
+                                            <img src="..{{ u.ürün.ürün_image_name.url }}" style="border-radius: 50%; width: 38px; height: 38px; position: relative; left:30px; top:5px;" >
+                                    </figure>
+                                </td>
+                                <!-- Ürün İmage -->
+                                <td class="product-col">
+                                    <h5 class="product-title"  style="font-size:20px; line-height: 2.3;">
+                                        {{ u.ürün.ürün_descrption }}
+                                    </h5>
+                                </td>
+                                <!-- Ürün Fiyat Alanı -->
+                                <td>
+                                    <p style="line-height: 3;">
+                                        {{ u.ürün.ürün_price }} ₺ 
+                                    </p>
+                                </td>
 
-                        <!-- Ürün Adet Alanı -->
-                        <td>
-                            <input type="number" class="form-control" style="width: 70px; margin-top:9px;" value="1">
-                        </td>
+                                <!-- Ürün Adet Alanı -->
+                                <td>
+                                    <span style="position: relative; top: 10px; color:white; display: inline-block;">
+                                        <form action="#" method="POST" style="display: inline-block;">
+                                        {% csrf_token %}
+                                            <input type="text" style="display: none;" class="form-control" name="eksideger" value="alcak">
+                                            <button type="submit" style="padding:0px 5px 0px 5px;" class="btn btn-danger">-</button>
+                                        </form>
 
-                        <!-- Ürün Delete Alanı -->
-                        <td class="text-right"><span class="subtotal-price">
-                            <a href="#" class="product-image" style="cursor: pointer; line-height: 3;">
-                                <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
-                            </a>
-                        </span></td>
-                    </tr>
+                                            <a style="padding:7px 5px 7px 5px; color:white !important; background-color: black; text-decoration: none;" class="badge badge-dark">1</a>
 
+                                        <form action="#" method="POST" style="display: inline-block;">
+                                        {% csrf_token %}
+                                            <input type="text" style="display: none;" class="form-control" name="artideger" value="yüksek">
+                                            <button type="submit" style="padding:0px 5px 0px 5px;" class="btn btn-primary">+</button>
+                                        </form>
+                                </span>
+                            </td>
 
-                    <tr class="product-row">
-                        <!-- Boş Alan -->
-                        <td>
-                            <figure class="product-image-container">
-                                    <img src="{% static 'image/image2.jpeg' %}" style="border-radius: 50%; width: 38px; height: 38px; position: relative; left:30px; top:5px;" >
-                            </figure>
-                        </td>
-                        <!-- Ürün İmage -->
-                        <td class="product-col">
-                            <h5 class="product-title"  style="font-size:20px; line-height: 2.3;">
-                                Lorem ipsum 
-                            </h5>
-                        </td>
-                        <!-- Ürün Fiyat Alanı -->
-                        <td>
-                            <p style="line-height: 3;">
-                                17.90 ₺
-                            </p>
-                        </td>
+                                <!-- Ürün Delete Alanı -->
+                                <td class="text-right"><span class="subtotal-price">
+                                    <a href="#" class="product-image" style="cursor: pointer; line-height: 3;">
+                                        <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
+                                    </a>
+                                </span></td>
+                            </tr>
+                        {% else %}
+                            <tr class="product-row">
+                               
+                                <!-- Ürün İmage -->
+                                <td class="product-col">
+                                    <h1>Ürün Bulunamadı</h1>
+                                </td>
+                               
+                            </tr>                        
+                        {% endif %}
+                    {% endfor %}
 
-                        <!-- Ürün Adet Alanı -->
-                        <td>
-                            <input type="number" class="form-control" style="width: 70px; margin-top:9px;" value="1">
-                        </td>
-
-                        <!-- Ürün Delete Alanı -->
-                        <td class="text-right"><span class="subtotal-price">
-                            <a href="#" class="product-image" style="cursor: pointer; line-height: 3;">
-                                <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
-                            </a>
-                        </span></td>
-                    </tr>
-
-                    
-                    <tr class="product-row">
-                        <!-- Boş Alan -->
-                        <td>
-                            <figure class="product-image-container">
-                                    <img src="{% static 'image/image2.jpeg' %}" style="border-radius: 50%; width: 38px; height: 38px; position: relative; left:30px; top:5px;" >
-                            </figure>
-                        </td>
-                        <!-- Ürün İmage -->
-                        <td class="product-col">
-                            <h5 class="product-title"  style="font-size:20px; line-height: 2.3;">
-                                Lorem ipsum 
-                            </h5>
-                        </td>
-                        <!-- Ürün Fiyat Alanı -->
-                        <td>
-                            <p style="line-height: 3;">
-                                17.90 ₺
-                            </p>
-                        </td>
-
-                        <!-- Ürün Adet Alanı -->
-                        <td>
-                            <input type="number" class="form-control" style="width: 70px; margin-top:9px;" value="1">
-                        </td>
-
-                        <!-- Ürün Delete Alanı -->
-                        <td class="text-right"><span class="subtotal-price">
-                            <a href="#" class="product-image" style="cursor: pointer; line-height: 3;">
-                                <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
-                            </a>
-                        </span></td>
-                    </tr>
-
-
-                    <tr class="product-row">
-                        <!-- Boş Alan -->
-                        <td>
-                            <figure class="product-image-container">
-                                    <img src="{% static 'image/image2.jpeg' %}" style="border-radius: 50%; width: 38px; height: 38px; position: relative; left:30px; top:5px;" >
-                            </figure>
-                        </td>
-                        <!-- Ürün İmage -->
-                        <td class="product-col">
-                            <h5 class="product-title"  style="font-size:20px; line-height: 2.3;">
-                                Lorem ipsum 
-                            </h5>
-                        </td>
-                        <!-- Ürün Fiyat Alanı -->
-                        <td>
-                            <p style="line-height: 3;">
-                                17.90 ₺
-                            </p>
-                        </td>
-
-                        <!-- Ürün Adet Alanı -->
-                        <td>
-                            <input type="number" class="form-control" style="width: 70px; margin-top:9px;" value="1">
-                        </td>
-
-                        <!-- Ürün Delete Alanı -->
-                        <td class="text-right"><span class="subtotal-price">
-                            <a href="#" class="product-image" style="cursor: pointer; line-height: 3;">
-                                <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
-                            </a>
-                        </span></td>
-                    </tr>
-
-                    <tr class="product-row">
-                        <!-- Boş Alan -->
-                        <td>
-                            <figure class="product-image-container">
-                                    <img src="{% static 'image/image2.jpeg' %}" style="border-radius: 50%; width: 38px; height: 38px; position: relative; left:30px; top:5px;" >
-                            </figure>
-                        </td>
-                        <!-- Ürün İmage -->
-                        <td class="product-col">
-                            <h5 class="product-title"  style="font-size:20px; line-height: 2.3;">
-                                Lorem ipsum 
-                            </h5>
-                        </td>
-                        <!-- Ürün Fiyat Alanı -->
-                        <td>
-                            <p style="line-height: 3;">
-                                17.90 ₺
-                            </p>
-                        </td>
-
-                        <!-- Ürün Adet Alanı -->
-                        <td>
-                            <input type="number" class="form-control" style="width: 70px; margin-top:9px;" value="1">
-                        </td>
-
-                        <!-- Ürün Delete Alanı -->
-                        <td class="text-right"><span class="subtotal-price">
-                            <a href="#" class="product-image" style="cursor: pointer; line-height: 3;">
-                                <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
-                            </a>
-                        </span></td>
-                    </tr>
 
                 </tbody>
 
@@ -209,26 +102,53 @@
         <div class="card" style="padding:20px">
             <h3>Sipariş Özeti</h3>
 
-            <table class="table table-totals">
-                <tbody>
-                    <tr>
-                        <td>Ürün Toplam</td>
-                        <td>17.90 ₺</td>
-                    </tr>
-                </tbody>
 
-                <tfoot>
-                    <tr>
-                        <td>Kargo Toplam</td>
-                        <td>17.90 ₺</td>
-                    </tr>
-                </tfoot>
-            </table>
+                {% for u in sepetim %}
+                    {% if u.kullanici.adi_soyadi == request.user.username %}
+                        <table class="table table-totals">
+                            <tbody>
+                                <tr>
+                                    <td>Ürün Toplam</td>
+                                    <td>17.90 ₺</td>
+                                </tr>
+                            </tbody>
+            
+                            <tfoot>
+                                <tr>
+                                    <td>Kargo Toplam</td>
+                                    <td>17.90 ₺</td>
+                                </tr>
+                            </tfoot>
+                        </table>
 
-            <div class="checkout-methods">
-                <a href="#" class="btn btn-block btn-dark">SEPETİ ONAYLA
-                    <i class="fa fa-arrow-right"></i></a>
-            </div>
+                        <div class="checkout-methods">
+                            <a href="#" class="btn btn-block btn-dark">SEPETİ ONAYLA
+                                <i class="fa fa-arrow-right"></i></a>
+                        </div>
+                    {% else %}
+                        <table class="table table-totals">
+                            <tbody>
+                                <tr>
+                                    <td>Ürün Toplam</td>
+                                    <td>0 ₺</td>
+                                </tr>
+                            </tbody>
+            
+                            <tfoot>
+                                <tr>
+                                    <td>Kargo Toplam</td>
+                                    <td>0 ₺</td>
+                                </tr>
+                            </tfoot>     
+                        </table>
+
+                        <div class="checkout-methods">
+                            <a href="#" class="btn btn-block btn-dark">SEPETİ ONAYLA
+                                <i class="fa fa-arrow-right"></i></a>
+                        </div>        
+                    {% endif %}
+                {% endfor %}
+
         </div>
     </div>
 </div>
