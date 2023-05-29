@@ -49,3 +49,15 @@ class Ürün_Listesi(models.Model):
     ürün_descrption = models.CharField(max_length=50)
     ürün_price      = models.CharField(max_length=50)
 
+class Sepetim(models.Model):
+    kullanici = models.ForeignKey(
+        "kkb_hesabim",
+        on_delete=models.CASCADE,
+    )
+
+    ürün = models.ForeignKey(
+        "Ürün_Listesi",
+        on_delete=models.CASCADE,
+    )
+    ürün_fiyat      = models.IntegerField()
+    total_fiyat     = models.IntegerField()

@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim, kkb_hesabim, Yardım 
+from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim, kkb_hesabim, Yardım, Sepetim
 
 site        = Site_Ayarları.objects.all()
 slide       = Slide_Gösterisi.objects.all()
@@ -89,6 +89,24 @@ def mybasket(request):
         'ürün_list':ürün_list,
     }
     return render(request, "basket.html",context)
+
+def create_sepet(request):
+    global site
+    global slide
+    global ürün_list
+
+    if request.method == "POST":
+        username    = request.POST["username"]
+        ürün_name   = request.POST["ürün_name"]
+        ürün_fiyat  = request.POST["ürün_fiyat"]
+
+        new_sepet = Sepetim.objects.create(kullanici=username,ürün=ürün_name, ürün_fiyat=ürün_fiyat, total_fiyat=ürün_fiyat, kargo_parasi=29)
+        new_sepet.save()
+
+        messages.success(request, f'Sepete Eklendi !!')
+        return redirect("/")
+    else:
+        return redirect("/")
 
 def myprofil(request):
     global site
