@@ -58,11 +58,11 @@ img {
               {% for h in hesap %} 
                   {% if h.adi_soyadi == request.user.username %}
 
-                  {% if h.profil_photo %}
-                    <img src="..{{ h.profil_photo.url }}" class="rounded-circle img-fluid" style="width: 150px !important; height: 150px !important;">
-                  {% else %}
-                    <img src="{% static 'image/user.png' %}" class="rounded-circle img-fluid" style="width: 150px !important; height: 150px !important;">
-                  {% endif %}  
+                    {% if h.profil_photo %}
+                      <img src="..{{ h.profil_photo.url }}" class="rounded-circle img-fluid" style="width: 150px !important; height: 150px !important;">
+                    {% else %}
+                      <img src="{% static 'image/user.png' %}" class="rounded-circle img-fluid" style="width: 150px !important; height: 150px !important;">
+                    {% endif %}  
 
                   {% endif %}
               {% endfor %}
