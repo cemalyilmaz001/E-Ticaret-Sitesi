@@ -13,10 +13,11 @@
               <p class="card-text">{{ w.ürün_descrption }} </p>
               
               {% if user.is_authenticated %}
-                <form action="#" method="post">
+                <form action="../create_sepet/" method="post">
                   {% csrf_token %}
                   <input type="text" name="username" value="{{ request.user.username }}" hidden>
-                  <input type="text" name="ürün_name" value="" hidden>
+                  <input type="text" name="ürün_name" value="{{ w.ürün_descrption }}" hidden>
+                  <input type="text" name="ürün_fiyat" value="{{ w.ürün_price }}" hidden>
                   <button type="submit" class="btn btn-primary">Sepete Ekle</button>
                 </form>
               {% else %}
