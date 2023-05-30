@@ -9,13 +9,12 @@
           <div class="card mt-3" style="width: 17rem;">
             <img class="card-img-top" src="{{ w.ürün_image_name.url }}" height="200" alt="Card image cap">
             <div class="card-body">
-              <h5 class="card-title">{{ w.ürün_price }} </h5>
+              <h5 class="card-title">{{ w.ürün_price }} TL</h5>
               <p class="card-text">{{ w.ürün_descrption }} </p>
               
               {% if user.is_authenticated %}
                 <form action="../create_sepet/" method="post">
                   {% csrf_token %}
-                  <input type="text" name="username" value="{{ request.user.username }}" hidden>
                   <input type="text" name="ürün_name" value="{{ w.ürün_descrption }}" hidden>
                   <input type="text" name="ürün_fiyat" value="{{ w.ürün_price }}" hidden>
                   <button type="submit" class="btn btn-primary">Sepete Ekle</button>

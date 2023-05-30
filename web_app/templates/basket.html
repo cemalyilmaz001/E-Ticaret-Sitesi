@@ -11,7 +11,13 @@
       <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
         <li class="breadcrumb-item active" aria-current="page">Sepetim</li>
+        {% if sepetim %}
         <li class="breadcrumb-item"><a href="/">Sepeti Onayla</a></li>
+        {% else %}
+        <li class="breadcrumb-item"><a href="/"></a></li>
+        {% endif %}
+
+
       </ol>
     </nav>
   </div>
@@ -31,8 +37,9 @@
                     </tr>
                 </thead>
                 <tbody>
+                    
                     {% for u in sepetim %}
-                        {% if u.kullanici.adi_soyadi == request.user.username %}
+                        {% if u.kullanici.username == request.user.username %}
                             <tr class="product-row">
                                 <!-- Boş Alan -->
                                 <td>
@@ -73,24 +80,60 @@
                             </td>
 
                                 <!-- Ürün Delete Alanı -->
-                                <td class="text-right"><span class="subtotal-price">
-                                    <a href="#" class="product-image" style="cursor: pointer; line-height: 3;">
-                                        <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
-                                    </a>
-                                </span></td>
-                            </tr>
-                        {% else %}
-                            <tr class="product-row">
-                               
-                                <!-- Ürün İmage -->
-                                <td class="product-col">
-                                    <h1>Ürün Bulunamadı</h1>
+                                <td class="text-right">
+                                    <form action="../sepet_delete/" method="post">
+                                        {% csrf_token %}
+                                        <span class="subtotal-price">
+                                            <a href="#" onclick="myfunctionClick()" class="product-image" style="cursor: pointer; line-height: 3;">
+                                                <input type="text" name="ids" value="{{ u.id }}" style="display: none;">
+                                                <button type="submit" id="myCheck" style="display: none;"></button>
+                                                <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
+                                            </a>
+                                        </span>
+                                    </form>
                                 </td>
-                               
-                            </tr>                        
-                        {% endif %}
-                    {% endfor %}
 
+                            </tr>          
+                            
+                            <script>
+                                function myfunctionClick(params) {
+                                  document.getElementById("myCheck").click();
+                                }
+                              </script>
+                            
+                    {% else %}
+                     
+                    <tr class="product-row">
+                        <!-- Boş Alan -->
+                        <td>
+                            <figure class="product-image-container">
+                            </figure>
+                        </td>
+                        <!-- Ürün İmage -->
+                        <td class="product-col">
+                            <h5 class="product-title"  style="font-size:20px; line-height: 2.3;">
+                                Ürün Bulunamadı
+                            </h5>
+                        </td>
+                        <!-- Ürün Fiyat Alanı -->
+                        <td>
+                            <p style="line-height: 3;">
+                            </p>
+                        </td>
+
+                        <!-- Ürün Adet Alanı -->
+                        <td>
+                            
+                    </td>
+
+                        <!-- Ürün Delete Alanı -->
+                        <td class="text-right"><span class="subtotal-price">
+                        </td>
+                    </tr> 
+                    {% endif %}
+                    {% endfor %}
+                    
+                            
 
                 </tbody>
 
@@ -98,13 +141,13 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="card" style="padding:20px">
             <h3>Sipariş Özeti</h3>
 
 
-                {% for u in sepetim %}
-                    {% if u.kullanici.adi_soyadi == request.user.username %}
+                {% if sepetim %}
+                    {% if request.user.username %}
                         <table class="table table-totals">
                             <tbody>
                                 <tr>
@@ -147,7 +190,7 @@
                                 <i class="fa fa-arrow-right"></i></a>
                         </div>        
                     {% endif %}
-                {% endfor %}
+                {% endif %}
 
         </div>
     </div>

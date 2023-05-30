@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -51,13 +52,20 @@ class Ürün_Listesi(models.Model):
 
 class Sepetim(models.Model):
     kullanici = models.ForeignKey(
-        "kkb_hesabim",
+        User,
         on_delete=models.CASCADE,
     )
 
     ürün = models.ForeignKey(
-        "Ürün_Listesi",
+        Ürün_Listesi,
         on_delete=models.CASCADE,
     )
-    ürün_fiyat      = models.IntegerField()
-    total_fiyat     = models.IntegerField()
+    ürün_fiyat      = models.IntegerField(default=1,blank=True, null=True)
+    total_atted     = models.IntegerField(default=1,blank=True, null=True)
+
+class SepetOnay(models.Model):
+    sepet = models.ForeignKey(
+        "Sepetim",
+        on_delete=models.CASCADE,
+    )
+    sepet_total_fiyati = models.IntegerField(default=1,blank=True, null=True)

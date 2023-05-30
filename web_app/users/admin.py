@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Email_Abonelik, Yardım, kkb_hesabim, Site_Ayarları, Slide_Gösterisi, Ürün_Listesi, İletişim
+from .models import Email_Abonelik, Yardım, kkb_hesabim, Site_Ayarları, Slide_Gösterisi, Ürün_Listesi, İletişim, Sepetim, SepetOnay
 
 # Register your models here.
 
@@ -10,4 +10,6 @@ admin.site.register(Ürün_Listesi)
 admin.site.register(İletişim)
 admin.site.register(kkb_hesabim)
 admin.site.register(Yardım)
+admin.site.register(Sepetim)
+admin.site.register(SepetOnay)
 

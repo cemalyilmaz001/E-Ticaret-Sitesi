@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim, kkb_hesabim, Yardım, Sepetim
 
@@ -11,7 +12,6 @@ slide       = Slide_Gösterisi.objects.all()
 kkb_hesap   = kkb_hesabim.objects.all()
 ssss        = Yardım.objects.all()
 
-# Create your views here.
 def index(request):
     global site
     global slide
@@ -87,27 +87,43 @@ def mybasket(request):
         'site': site,
         'slide':slide,
         'ürün_list':ürün_list,
+        'sepetim':Sepetim.objects.all(),
     }
     return render(request, "basket.html",context)
 
+@login_required
 def create_sepet(request):
     global site
     global slide
     global ürün_list
 
     if request.method == "POST":
-        username    = request.POST["username"]
         ürün_name   = request.POST["ürün_name"]
         ürün_fiyat  = request.POST["ürün_fiyat"]
-
-        new_sepet = Sepetim.objects.create(kullanici=username,ürün=ürün_name, ürün_fiyat=ürün_fiyat, total_fiyat=ürün_fiyat, kargo_parasi=29)
-        new_sepet.save()
+        for w in Ürün_Listesi.objects.filter(ürün_price=ürün_fiyat):
+            if w.ürün_price == ürün_fiyat:
+                Sepetim.objects.create(kullanici=request.user,ürün=w, ürün_fiyat=int(ürün_fiyat), total_atted=1).save()
 
         messages.success(request, f'Sepete Eklendi !!')
         return redirect("/")
     else:
         return redirect("/")
 
+@login_required
+def sepet_delete(request):
+    global site
+    global slide
+    global ürün_list
+
+    if request.method == "POST":
+        ids_delete   = request.POST["ids"]
+        Sepetim.objects.filter(id=ids_delete).delete()
+        messages.success(request, f'Ürün Kaldırıldı !!')
+        return redirect("/")
+    else:
+        return redirect("/")
+
+@login_required
 def myprofil(request):
     global site
     global slide
@@ -122,6 +138,7 @@ def myprofil(request):
     }
     return render(request, "myprofil.html", context)
 
+@login_required
 def imageUpdate(request):  
     global site
     global slide
@@ -138,14 +155,9 @@ def imageUpdate(request):
         messages.success(request, f'Profil Resmi Güncellendi !!')
         return redirect("/")
     else:
-        context = {
-            'site': site,
-            'slide':slide,
-            'ürün_list':ürün_list,
-        }
-        return render(request, "base.html",context)
+        return redirect("/")
 
-
+@login_required
 def hesap_guncelleme(request): 
     global site
     global slide
