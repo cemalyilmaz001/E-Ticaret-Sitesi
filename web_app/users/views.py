@@ -12,6 +12,14 @@ slide       = Slide_Gösterisi.objects.all()
 kkb_hesap   = kkb_hesabim.objects.all()
 ssss        = Yardım.objects.all()
 
+def sepet_adet(request):
+    adet = 0
+    for sepetim in Sepetim.objects.all():
+        if sepetim.kullanici.username == request.user.username:
+            adet += int(sepetim.total_atted)
+    return adet
+
+# Ana Sayfa
 def index(request):
     global site
     global slide
@@ -20,9 +28,11 @@ def index(request):
         'site': site,
         'slide':slide,
         'ürün_list':ürün_list,
+        'adets':sepet_adet(request),
     }
     return render(request, "base.html",context)
 
+# Biz Kimiz
 def bzkmz(request):
     global site
     global slide
@@ -31,9 +41,11 @@ def bzkmz(request):
         'site': site,
         'slide':slide,
         'ürün_list':ürün_list,
+        'adets':sepet_adet(request),
     }
     return render(request, "bzkm.html",context)
 
+# Yardım
 def soru(request):
     global site
     global slide
@@ -45,9 +57,11 @@ def soru(request):
         'slide':slide,
         'ürün_list':ürün_list,
         'yardim':ssss,
+        'adets':sepet_adet(request),
     }
     return render(request, "sorular.html", context)
 
+# Email Gönder
 def email_abonelik(request):
     if request.method == 'POST':
         abone = request.POST["email_abonelik"]
@@ -58,6 +72,7 @@ def email_abonelik(request):
     else:
         return redirect("/")
 
+# İletişim
 def contact(request):
     global site
     global slide
@@ -76,21 +91,41 @@ def contact(request):
             'site': site,
             'slide':slide,
             'ürün_list':ürün_list,
+            'adets':sepet_adet(request),
         }
         return render(request, "iletişim.html",context)
 
+# Sepetim
 def mybasket(request):
     global site
     global slide
     global ürün_list
+
+    toplam_fiyat = 0
+    for i in Sepetim.objects.all():
+        if i.kullanici.username == request.user.username:
+            toplam_fiyat  += int(i.ürün_fiyat) * int(i.total_atted)
+
+    #for r in SepetOnay.objects.all():
+    #    if r.sepet.kullanici.username == request.user.username:
+    #        r.sepet_total_fiyati = int(toplam_fiyat)
+    #        r.save()
+    #    else:
+    #        for i in Sepetim.objects.all():
+    #            if i.kullanici.username == request.user.username:
+    #                SepetOnay.objects.create(sepet=i,sepet_total_fiyati=int(toplam_fiyat)).save()
+
     context = {
         'site': site,
         'slide':slide,
         'ürün_list':ürün_list,
         'sepetim':Sepetim.objects.all(),
+        'fiyat':toplam_fiyat,
+        'adets':sepet_adet(request),
     }
     return render(request, "basket.html",context)
 
+# Sepete Ekle 
 @login_required
 def create_sepet(request):
     global site
@@ -100,15 +135,27 @@ def create_sepet(request):
     if request.method == "POST":
         ürün_name   = request.POST["ürün_name"]
         ürün_fiyat  = request.POST["ürün_fiyat"]
-        for w in Ürün_Listesi.objects.filter(ürün_price=ürün_fiyat):
-            if w.ürün_price == ürün_fiyat:
-                Sepetim.objects.create(kullanici=request.user,ürün=w, ürün_fiyat=int(ürün_fiyat), total_atted=1).save()
+        totalfiyat = 0
+        e = 0
+        for i in Sepetim.objects.all():
+            if i.kullanici.username == request.user.username:
+                if i.ürün.ürün_price == ürün_fiyat:
+                    e += 1
+                    for w in Ürün_Listesi.objects.filter(ürün_price=ürün_fiyat):
+                        if w.ürün_price == ürün_fiyat:
+                            i.total_atted += 1
+                            i.save()
+        if e == 0:
+            for w in Ürün_Listesi.objects.filter(ürün_price=ürün_fiyat):
+                if w.ürün_price == ürün_fiyat:
+                    a = Sepetim.objects.create(kullanici=request.user,ürün=w, ürün_fiyat=int(ürün_fiyat), total_atted=1).save()
 
         messages.success(request, f'Sepete Eklendi !!')
         return redirect("/")
     else:
         return redirect("/")
 
+# Sepet deki ürün silme 
 @login_required
 def sepet_delete(request):
     global site
@@ -116,13 +163,53 @@ def sepet_delete(request):
     global ürün_list
 
     if request.method == "POST":
-        ids_delete   = request.POST["ids"]
-        Sepetim.objects.filter(id=ids_delete).delete()
+        ids     = request.POST["ids"]
+        Sepetim.objects.filter(id=int(ids)).delete()
         messages.success(request, f'Ürün Kaldırıldı !!')
-        return redirect("/")
+        return redirect("/mybasket")
     else:
         return redirect("/")
 
+@login_required
+def sepet_eksi(request):
+    global site
+    global slide
+    global ürün_list
+
+    if request.method == "POST":
+        eksi     = request.POST["eksideger"]
+        sepet = Sepetim.objects.filter(id=int(eksi))
+        for i in sepet:
+            if i.total_atted == 1:
+                Sepetim.objects.filter(id=int(eksi)).delete()
+            else:
+                i.total_atted -= 1
+
+            i.save()
+
+        messages.success(request, f'Ürün Düşürüldü !!')
+        return redirect("/mybasket")
+    else:
+        return redirect("/")
+
+@login_required
+def sepet_arti(request):
+    global site
+    global slide
+    global ürün_list
+
+    if request.method == "POST":
+        arti     = request.POST["artideger"]
+        sepet = Sepetim.objects.filter(id=int(arti))
+        for i in sepet:
+            i.total_atted += 1
+            i.save()
+        messages.success(request, f'Ürün Artırıldı !!')
+        return redirect("/mybasket")
+    else:
+        return redirect("/")
+
+# Profil
 @login_required
 def myprofil(request):
     global site
@@ -135,6 +222,7 @@ def myprofil(request):
         'slide':slide,
         'ürün_list':ürün_list,
         'hesap':kkb_hesap,
+        'adets':sepet_adet(request),
     }
     return render(request, "myprofil.html", context)
 
@@ -227,6 +315,7 @@ def login_view(request):
             'site': site,
             'slide':slide,
             'ürün_list':ürün_list,
+            'adets':sepet_adet(request),
         }
         return render(request, "login.html",context)
 
@@ -261,6 +350,7 @@ def register(request):
             'site': site,
             'slide':slide,
             'ürün_list':ürün_list,
+            'adets':sepet_adet(request),
         }
         return render(request, "register.html",context)
 

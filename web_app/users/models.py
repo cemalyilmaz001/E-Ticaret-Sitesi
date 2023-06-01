@@ -60,12 +60,5 @@ class Sepetim(models.Model):
         Ürün_Listesi,
         on_delete=models.CASCADE,
     )
-    ürün_fiyat      = models.IntegerField(default=1,blank=True, null=True)
+    ürün_fiyat      = models.IntegerField(blank=True, null=True)
     total_atted     = models.IntegerField(default=1,blank=True, null=True)
-
-class SepetOnay(models.Model):
-    sepet = models.ForeignKey(
-        "Sepetim",
-        on_delete=models.CASCADE,
-    )
-    sepet_total_fiyati = models.IntegerField(default=1,blank=True, null=True)

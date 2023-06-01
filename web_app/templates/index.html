@@ -77,6 +77,12 @@
                     <li class="nav-item">
                       <a class="nav-link" href="/mybasket" style="color:black;">
                         Sepetim
+                        {% if adets %}
+                        <span class="badge badge-warning" style="position: absolute;color:white; background-color: blue; top:4px;right: 76px;">
+                          {{ adets }}
+                        </span>
+                        {% endif %}
+
                         <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
                       </a>
                     </li>
@@ -125,8 +131,8 @@
 
                       <li class="nav-item">
                         <a class="nav-link" href="/mybasket" style="color:black;">
-                          <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
                           Sepetim
+                          <img src="{% static 'image/sepetim.png' %}" alt="Logo" width="30" height="24" class="right-grs-spet">
                         </a>
                       </li>
 

@@ -19,6 +19,8 @@ urlpatterns = [
     path("mybasket/", views.mybasket, name="mybasket"),
     path("create_sepet/", views.create_sepet, name="create_sepet"),
     path("sepet_delete/", views.sepet_delete, name="sepet_delete"),
+    path("sepet_eksi/", views.sepet_eksi, name="sepet_eksi"),
+    path("sepet_arti/", views.sepet_arti, name="sepet_arti"),
     path("imageUpdate/", views.imageUpdate, name="imageUpdate"),
     path("hesap_guncelleme/", views.hesap_guncelleme, name="hesap_guncelleme"),
 ]

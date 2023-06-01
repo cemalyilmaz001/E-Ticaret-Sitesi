@@ -56,24 +56,24 @@
                                 <!-- Ürün Fiyat Alanı -->
                                 <td>
                                     <p style="line-height: 3;">
-                                        {{ u.ürün.ürün_price }} ₺ 
+                                        {{ u.ürün.ürün_price }} ₺
                                     </p>
                                 </td>
 
                                 <!-- Ürün Adet Alanı -->
                                 <td>
                                     <span style="position: relative; top: 10px; color:white; display: inline-block;">
-                                        <form action="#" method="POST" style="display: inline-block;">
+                                        <form action="../sepet_eksi/" method="POST" style="display: inline-block;">
                                         {% csrf_token %}
-                                            <input type="text" style="display: none;" class="form-control" name="eksideger" value="alcak">
+                                            <input type="text" style="display: none;" class="form-control" name="eksideger" value="{{ u.id }}">
                                             <button type="submit" style="padding:0px 5px 0px 5px;" class="btn btn-danger">-</button>
                                         </form>
 
-                                            <a style="padding:7px 5px 7px 5px; color:white !important; background-color: black; text-decoration: none;" class="badge badge-dark">1</a>
+                                            <a style="padding:7px 5px 7px 5px; color:white !important; background-color: black; text-decoration: none;" class="badge badge-dark">{{ u.total_atted }}</a>
 
-                                        <form action="#" method="POST" style="display: inline-block;">
+                                        <form action="../sepet_arti/" method="POST" style="display: inline-block;">
                                         {% csrf_token %}
-                                            <input type="text" style="display: none;" class="form-control" name="artideger" value="yüksek">
+                                            <input type="text" style="display: none;" class="form-control" name="artideger" value="{{ u.id }}">
                                             <button type="submit" style="padding:0px 5px 0px 5px;" class="btn btn-primary">+</button>
                                         </form>
                                 </span>
@@ -84,22 +84,15 @@
                                     <form action="../sepet_delete/" method="post">
                                         {% csrf_token %}
                                         <span class="subtotal-price">
-                                            <a href="#" onclick="myfunctionClick()" class="product-image" style="cursor: pointer; line-height: 3;">
+                                            <div class="product-image" style="cursor: pointer; line-height: 4;">
                                                 <input type="text" name="ids" value="{{ u.id }}" style="display: none;">
-                                                <button type="submit" id="myCheck" style="display: none;"></button>
-                                                <img src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;" >
-                                            </a>
+                                                <input type="image" src="{% static 'image/çöp.png' %}" style="border-radius: 50%; width: 30px; height: 30px;">
+                                            </div>
                                         </span>
                                     </form>
                                 </td>
 
                             </tr>          
-                            
-                            <script>
-                                function myfunctionClick(params) {
-                                  document.getElementById("myCheck").click();
-                                }
-                              </script>
                             
                     {% else %}
                      
@@ -148,26 +141,23 @@
 
                 {% if sepetim %}
                     {% if request.user.username %}
-                        <table class="table table-totals">
-                            <tbody>
-                                <tr>
-                                    <td>Ürün Toplam</td>
-                                    <td>17.90 ₺</td>
-                                </tr>
-                            </tbody>
-            
-                            <tfoot>
-                                <tr>
-                                    <td>Kargo Toplam</td>
-                                    <td>17.90 ₺</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                            <table class="table table-totals">
+                                <tbody>
+                                    <tr>
+                                        <td>Ürün Toplam</td>
+                                        <td>{{ fiyat }} ₺</td>
+                                    </tr>
+                                </tbody>
+                
+                                <tfoot>
+                                    
+                                </tfoot>
+                            </table>
 
-                        <div class="checkout-methods">
-                            <a href="#" class="btn btn-block btn-dark">SEPETİ ONAYLA
-                                <i class="fa fa-arrow-right"></i></a>
-                        </div>
+                            <div class="checkout-methods">
+                                <a href="#" class="btn btn-block btn-dark">SEPETİ ONAYLA
+                                    <i class="fa fa-arrow-right"></i></a>
+                            </div>
                     {% else %}
                         <table class="table table-totals">
                             <tbody>
