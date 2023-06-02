@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row mt-4">
+</div>
+
+<div class="row">
+  <div class="col-lg-10">
+    <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a href="/mybasket">Sepetim</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Sepeti Onayla</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <form action="../mybasket_onay/" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="exampleInputEmail1">Teslimat Adresi</label>
+              <input type="text" class="form-control" required id="exampleInputEmail1" name="adres" placeholder="Teslimat Adresi">
+              <small id="emailHelp" class="form-text text-muted">Siparişiniz Burada Belirtilen Adresinize Gönderilicektir.</small>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Kart Numarası</label>
+                <input type="text" class="form-control" required id="exampleInputEmail1" name="number" placeholder="Kart Numarası">
+            </div>
+            
+            <div class="row mt-2">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">AY</label>
+                        <select class="form-control" required name="ay" id="exampleFormControlSelect1">
+                          <option>01</option>
+                          <option>02</option>
+                          <option>03</option>
+                          <option>04</option>
+                          <option>05</option>
+                          <option>06</option>
+                          <option>07</option>
+                          <option>08</option>
+                          <option>09</option>
+                          <option>10</option>
+                          <option>11</option>
+                          <option>12</option>
+                        </select>
+                      </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">YIL</label>
+                        <select class="form-control" required name="yil" id="exampleFormControlSelect1">
+                            {% for i in yıl %}
+                                <option>{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">CVV</label>
+                        <input type="text" class="form-control" required maxlength="3" name="cvv" id="exampleInputEmail1" placeholder="CVV">
+                    </div>
+                </div>
+            </div>
+    
+            <br>
+            <div class="form-check">
+              <input type="checkbox" required name="sözleşme" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">
+                <a href="#" class="badge badge-dark" style="color:white; background-color: #343a40; text-decoration: none;">Ön Bilgilendirme Koşulları'nı ve Mesafeli Satış Sözleşmesi</a>'ni okudum, onaylıyorum.</label>
+            </div>
+             
+            <button type="submit" class="btn mt-2 btn-outline-success">{{ fiyat }} TL Onayla</button>
+        </form>    
+    </div>
+    <div class="col-lg-2"> </div>
+</div>
+
+
+{% endblock %}

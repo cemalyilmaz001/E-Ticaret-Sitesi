@@ -12,7 +12,7 @@
         <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
         <li class="breadcrumb-item active" aria-current="page">Sepetim</li>
         {% if sepetim %}
-        <li class="breadcrumb-item"><a href="/">Sepeti Onayla</a></li>
+        <li class="breadcrumb-item"><a href="/mybasket_onay">Sepeti Onayla</a></li>
         {% else %}
         <li class="breadcrumb-item"><a href="/"></a></li>
         {% endif %}
@@ -40,6 +40,7 @@
                     
                     {% for u in sepetim %}
                         {% if u.kullanici.username == request.user.username %}
+                        {% if sepetim %}
                             <tr class="product-row">
                                 <!-- Boş Alan -->
                                 <td>
@@ -93,7 +94,9 @@
                                 </td>
 
                             </tr>          
-                            
+                    
+                    
+
                     {% else %}
                      
                     <tr class="product-row">
@@ -124,6 +127,7 @@
                         </td>
                     </tr> 
                     {% endif %}
+                    {% endif %}
                     {% endfor %}
                     
                             
@@ -137,7 +141,6 @@
     <div class="col-lg-3">
         <div class="card" style="padding:20px">
             <h3>Sipariş Özeti</h3>
-
 
                 {% if sepetim %}
                     {% if request.user.username %}
@@ -155,8 +158,9 @@
                             </table>
 
                             <div class="checkout-methods">
-                                <a href="#" class="btn btn-block btn-dark">SEPETİ ONAYLA
-                                    <i class="fa fa-arrow-right"></i></a>
+                                <a href="/mybasket_onay" class="btn btn-block btn-dark">SEPETİ ONAYLA
+                                    <i class="fa fa-arrow-right"></i>
+                                </a>
                             </div>
                     {% else %}
                         <table class="table table-totals">

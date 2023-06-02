@@ -17,6 +17,7 @@ urlpatterns = [
 
     path("myprofil/", views.myprofil, name="myprofil"),
     path("mybasket/", views.mybasket, name="mybasket"),
+    path("mybasket_onay/", views.mybasket_onay, name="mybasket_onay"),
     path("create_sepet/", views.create_sepet, name="create_sepet"),
     path("sepet_delete/", views.sepet_delete, name="sepet_delete"),
     path("sepet_eksi/", views.sepet_eksi, name="sepet_eksi"),

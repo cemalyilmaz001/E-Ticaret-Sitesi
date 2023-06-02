@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Site_Ayarları, Slide_Gösterisi, Email_Abonelik, Ürün_Listesi, İletişim, kkb_hesabim, Yardım, Sepetim
+import datetime
 
 site        = Site_Ayarları.objects.all()
 slide       = Slide_Gösterisi.objects.all()
@@ -106,15 +107,6 @@ def mybasket(request):
         if i.kullanici.username == request.user.username:
             toplam_fiyat  += int(i.ürün_fiyat) * int(i.total_atted)
 
-    #for r in SepetOnay.objects.all():
-    #    if r.sepet.kullanici.username == request.user.username:
-    #        r.sepet_total_fiyati = int(toplam_fiyat)
-    #        r.save()
-    #    else:
-    #        for i in Sepetim.objects.all():
-    #            if i.kullanici.username == request.user.username:
-    #                SepetOnay.objects.create(sepet=i,sepet_total_fiyati=int(toplam_fiyat)).save()
-
     context = {
         'site': site,
         'slide':slide,
@@ -124,6 +116,45 @@ def mybasket(request):
         'adets':sepet_adet(request),
     }
     return render(request, "basket.html",context)
+
+# Sepetim
+@login_required
+def mybasket_onay(request):
+    global site
+    global slide
+    global ürün_list
+    toplam_fiyat = 0
+    for i in Sepetim.objects.all():
+        if i.kullanici.username == request.user.username:
+            toplam_fiyat  += int(i.ürün_fiyat) * int(i.total_atted)
+
+    deger = []
+    year = datetime.datetime.today().year
+    art = int(year) + 18
+    for i in range(int(year),int(art)+1):
+        deger.append(i)
+
+    if request.method == "POST":
+        adres    = request.POST["adres"]
+        number   = request.POST["number"]
+        ay       = request.POST["ay"]
+        yil      = request.POST["yil"]
+        cvv      = request.POST["cvv"]
+        sözleşme = request.POST["sözleşme"]
+
+        messages.success(request, f'En Kısa Sürede Adresinize Teslim edilecektir !!')
+        return redirect("/")
+    else:
+        context = {
+            'site': site,
+            'slide':slide,
+            'ürün_list':ürün_list,
+            'sepetim':Sepetim.objects.all(),
+            'adets':sepet_adet(request),
+            'fiyat':toplam_fiyat,
+            'yıl':deger,
+        }
+        return render(request, "basket_onay.html",context)
 
 # Sepete Ekle 
 @login_required
@@ -286,8 +317,6 @@ def hesap_guncelleme(request):
         return redirect("/myprofil")
     else:
         return redirect("/")
-
-
 
 def login_view(request):
     global site
