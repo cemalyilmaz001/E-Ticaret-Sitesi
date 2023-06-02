@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="row mt-4">
+</div>
+
+<div class="row">
+  <div class="col-lg-10">
+    <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Ürün Detay</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+     <div class="row mt-4">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-4">
+            <img src="{{ ürün_details_slugs.ürün_image_name.url }}" width="400" height="500">
+        </div> 
+        <div class="col-lg-4">
+          <div style="position: relative; left:60px;">
+            <h3>{{ ürün_details_slugs.ürün_descrption }}</h3>
+            <h5>{{ ürün_details_slugs.ürün_price }} TL</h5>
+            {% if user.is_authenticated %}
+                <form action="../create_sepet/" class="mt-3" method="post">
+                  {% csrf_token %}
+                  <input type="text" name="ürün_name" value="{{ ürün_details_slugs.ürün_descrption }}" hidden>
+                  <input type="text" name="ürün_fiyat" value="{{ ürün_details_slugs.ürün_price }}" hidden>
+                  <button type="submit" class="btn btn-primary">Sepete Ekle</button>
+                </form>
+              {% else %}
+                <a href="/login" class="btn btn-primary">
+                  Sepete Ekle
+                </a>
+              {% endif %}
+          </div>
+
+        </div> 
+        <div class="col-lg-2"></div>
+      </div>
+     </div>     
+{% endblock %}

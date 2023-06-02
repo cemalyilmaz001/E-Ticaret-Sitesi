@@ -25,12 +25,22 @@ def index(request):
     global site
     global slide
     global ürün_list
+    search_post = request.GET.get('page')
+
+    if search_post == "mum":
+        ürün = Ürün_Listesi.objects.filter(page_search="mum")
+    elif search_post == "ahsap":
+        ürün = Ürün_Listesi.objects.filter(page_search="ahsap")
+    else:
+        ürün = ürün_list
+
     context = {
         'site': site,
         'slide':slide,
-        'ürün_list':ürün_list,
+        'ürün_list':ürün,
         'adets':sepet_adet(request),
     }
+    
     return render(request, "base.html",context)
 
 # Biz Kimiz
@@ -96,6 +106,21 @@ def contact(request):
         }
         return render(request, "iletişim.html",context)
 
+def ürün_details(request, slug): # ürün/slug
+    details = Ürün_Listesi.objects.get(slug_ürün=slug)
+    global site
+    global slide
+    global ürün_list
+
+    context = {
+        'site': site,
+        'slide':slide,
+        'ürün_list':ürün_list,
+        'adets':sepet_adet(request),
+        'ürün_details_slugs':details,
+    }
+    return render(request, "ürün_details.html",context)
+
 # Sepetim
 def mybasket(request):
     global site
@@ -141,6 +166,15 @@ def mybasket_onay(request):
         yil      = request.POST["yil"]
         cvv      = request.POST["cvv"]
         sözleşme = request.POST["sözleşme"]
+        ids      = request.POST["ids"]
+
+        if sözleşme == "on":
+            #for x in kkb_hesabim.objects.filter(adi_soyadi=request.user.username):
+            #    x.kargo_adres = adres
+            #x.save()
+            for y in Sepetim.objects.all():
+                if y.kullanici.username == request.user.username:
+                    Sepetim.objects.filter(id=int(ids)).delete()
 
         messages.success(request, f'En Kısa Sürede Adresinize Teslim edilecektir !!')
         return redirect("/")

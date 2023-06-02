@@ -49,6 +49,11 @@ class Ürün_Listesi(models.Model):
     ürün_image_name = models.ImageField(upload_to='image/') 
     ürün_descrption = models.CharField(max_length=50)
     ürün_price      = models.CharField(max_length=50)
+    slug_ürün       = models.SlugField(default="", null=False)
+    page_search     = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.slug_ürün}"
 
 class Sepetim(models.Model):
     kullanici = models.ForeignKey(

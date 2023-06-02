@@ -20,11 +20,15 @@
 <div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
+      {% for x in sepetim %}
+        {% if x.kullanici.username == request.user.username %}        
         <form action="../mybasket_onay/" method="POST">
             {% csrf_token %}
             <div class="form-group">
               <label for="exampleInputEmail1">Teslimat Adresi</label>
-              <input type="text" class="form-control" required id="exampleInputEmail1" name="adres" placeholder="Teslimat Adresi">
+                <input type="text" class="form-control" required id="exampleInputEmail1" name="adres" placeholder="Lütfen Kargo Adresinizi Giriniz">
+                <input type="text" required style="display: none;" name="ids" value="{{ x.id }}">
+
               <small id="emailHelp" class="form-text text-muted">Siparişiniz Burada Belirtilen Adresinize Gönderilicektir.</small>
             </div>
             <br>
@@ -80,6 +84,9 @@
              
             <button type="submit" class="btn mt-2 btn-outline-success">{{ fiyat }} TL Onayla</button>
         </form>    
+
+        {% endif %}
+      {% endfor %}
     </div>
     <div class="col-lg-2"> </div>
 </div>

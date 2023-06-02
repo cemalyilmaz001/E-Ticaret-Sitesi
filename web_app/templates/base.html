@@ -1,19 +1,29 @@
  {% extends "index.html" %}
-
  {% block content %}
+
+ <style>
+  .card:hover {
+    cursor: pointer;
+  }
+ </style> 
 
       <div class="row mt-4">
           
-              <!-- Ürünler Bu kısımda -->
+          <!-- Ürünler Bu kısımda -->
           {% for w in ürün_list %}
           <div class="card mt-3" style="width: 17rem;">
-            <img class="card-img-top" src="{{ w.ürün_image_name.url }}" height="200" alt="Card image cap">
+            <a href="/ürün/{{ w.slug_ürün }}">
+              <img class="card-img-top" src="{{ w.ürün_image_name.url }}" height="200" alt="Card image cap">
+            </a>
+
             <div class="card-body">
-              <h5 class="card-title">{{ w.ürün_price }} TL</h5>
-              <p class="card-text">{{ w.ürün_descrption }} </p>
+              <a href="/ürün/{{ w.slug_ürün }}" style="color:black; text-decoration: none;">
+                <h5 class="card-title">{{ w.ürün_price }} TL</h5>
+                <p class="card-text">{{ w.ürün_descrption }} </p>
+              </a>
               
               {% if user.is_authenticated %}
-                <form action="../create_sepet/" method="post">
+                <form action="../create_sepet/" class="mt-3" method="post">
                   {% csrf_token %}
                   <input type="text" name="ürün_name" value="{{ w.ürün_descrption }}" hidden>
                   <input type="text" name="ürün_fiyat" value="{{ w.ürün_price }}" hidden>
